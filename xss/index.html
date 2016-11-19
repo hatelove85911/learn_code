@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title></title>
+
+  <link rel="stylesheet" href="css/styles.css?v=1.0">
+
+</head>
+
+<body>
+
+  <button id="test" onclick="alert" value="" >sss</button>
+  
+  <script type="text/javascript" charset="utf-8">
+   testnode = document.getElementById('test')
+
+   var aaa = '"/>bcd"'
+    var abc = ["alert(",aaa, ")" ].join('')
+    testnode.setAttribute('onclick', abc)  
+  
+  
+  </script>
+
+
+
+</body>
+</html>
