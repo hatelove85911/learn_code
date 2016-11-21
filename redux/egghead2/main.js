@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom'
 import {createStore, combineReducers} from 'redux'
 
 
+// reducers
 const visibilityFilter = (state = "SHOW_ALL", action) => {
   switch (action.type){
     case 'SET_VISIBILITY':
@@ -61,6 +62,7 @@ const todoApp = combineReducers({
 const store = createStore(todoApp);
 
 
+// react components
 const FilterLink = ({filter, currentFilter ,children}) => {
   if (filter === currentFilter) {
     return <span>{children}</span>
@@ -74,6 +76,28 @@ const FilterLink = ({filter, currentFilter ,children}) => {
         })
       }
     }>{children}</a>
+  )
+}
+
+const Todo = ({completed, text, onClick}) => {
+  return (
+    <li onClick={onClick} style={{
+                textDecoration: completed ? 'line-through' : 'none'
+               }}>{text}</li>
+  )
+};
+
+const TodoList = ({visibleTodos, onTodoClick }) => {
+  return (
+    <ul>
+      {visibleTodos.map(t => {
+        return (
+          <Todo {...t} key={t.id} onClick={() => {
+            onTodoClick(t.id)
+          }}/>
+        )
+      })}
+    </ul>
   )
 }
 
@@ -114,22 +138,13 @@ class TodoApp extends Component {
             this.refs.input.value = ""
           }
         }> Add </button>
+        <TodoList visibleTodos={visibleTodos} onTodoClick={(todoid) => {
+              store.dispatch({
+                type: 'TOGGLE_TODO',
+                id: todoid
+              })
+        }}/>
         
-        <ul>
-          {visibleTodos.map(t => {
-            return (
-              <li key={t.id} onClick={() => {
-                  store.dispatch({
-                    type: 'TOGGLE_TODO',
-                    id: t.id
-                  })
-                }
-              } style={{
-                textDecoration: t.completed ? 'line-through' : 'none'
-               }}>{t.text}</li>
-            )
-          })}
-        </ul>
         <p> show:{' '}
           <FilterLink filter="SHOW_ALL" currentFilter={visibilityFilter}>All</FilterLink>,{' '}
           <FilterLink filter="SHOW_ACTIVE" currentFilter={visibilityFilter}>Active</FilterLink>,{' '}
