@@ -61,12 +61,47 @@ const todoApp = combineReducers({
 const store = createStore(todoApp);
 
 
+const FilterLink = ({filter, currentFilter ,children}) => {
+  if (filter === currentFilter) {
+    return <span>{children}</span>
+  }
+  return (
+    <a href='#' onClick={
+      () => {
+        store.dispatch({
+          type: 'SET_VISIBILITY',
+          filter
+        })
+      }
+    }>{children}</a>
+  )
+}
+
+const getVisibleTodos = (todos, filter) => {
+  switch (filter) {
+    case 'SHOW_ALL':
+      return todos
+    case 'SHOW_ACTIVE':
+      return todos.filter((t) => {
+        return !t.completed
+      })
+    case 'SHOW_COMPLETED':
+      return todos.filter((t) => {
+        return t.completed
+      })
+    default:
+      return todos
+  }
+}
 
 let nextId = 0;
 class TodoApp extends Component {
   init() {
   }
   render() {
+    const {todos,  visibilityFilter} = this.props
+    const visibleTodos = getVisibleTodos(todos, visibilityFilter)
+
     return (
       <div>
         <input ref='input'/>
@@ -81,7 +116,7 @@ class TodoApp extends Component {
         }> Add </button>
         
         <ul>
-          {this.props.todos.map(t => {
+          {visibleTodos.map(t => {
             return (
               <li key={t.id} onClick={() => {
                   store.dispatch({
@@ -95,6 +130,11 @@ class TodoApp extends Component {
             )
           })}
         </ul>
+        <p> show:{' '}
+          <FilterLink filter="SHOW_ALL" currentFilter={visibilityFilter}>All</FilterLink>,{' '}
+          <FilterLink filter="SHOW_ACTIVE" currentFilter={visibilityFilter}>Active</FilterLink>,{' '}
+          <FilterLink filter="SHOW_COMPLETED" currentFilter={visibilityFilter}>Completed</FilterLink>,{' '}
+        </p>
       </div>
     )
   }
@@ -102,7 +142,7 @@ class TodoApp extends Component {
 
 const render = () => {
   ReactDOM.render(
-    <TodoApp todos={store.getState().todos}/>, document.getElementById('root')
+    <TodoApp {...store.getState()}/>, document.getElementById('root')
   )
 }
 
