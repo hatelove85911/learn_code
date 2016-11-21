@@ -1,143 +1,110 @@
-<<<<<<< HEAD
 import expect from 'expect'
-import React from 'react'
+import React, {Component} from 'react'
 import ReactDOM from 'react-dom'
-import {createStore} from 'redux'
+import {createStore, combineReducers} from 'redux'
 
-function counter(state = 0, action) {
+
+const visibilityFilter = (state = "SHOW_ALL", action) => {
+  switch (action.type){
+    case 'SET_VISIBILITY':
+      return action.filter
+      break
+    default:
+      return state
+  }
+}
+const todo = (state, action) => {
   switch (action.type) {
-    case 'INCREMENT':
-      return state + 1
+    case 'ADD_TODO':
+      return {
+        id: action.id,
+        text: action.text,
+        completed: false
+      }
       break;
-    case 'DECREMENT':
-      return state - 1
+    case 'TOGGLE_TODO':
+      if (state.id === action.id) {
+        return {
+          ...state,
+          completed: !state.completed
+        }
+      }
+      return state
       break;
     default:
-      return state;
+      return state
   }
 }
 
-function counters(counts = [], action) {
+
+const todos = (state = [], action) => {
   switch (action.type) {
-    case 'ADD_COUNTER':
-      return [...counts, 0]
+    case 'ADD_TODO':
+      return [...state, todo(undefined, action)]
       break;
-    case 'REMOVE_COUNTER':
-      return [...counts.slice(0, action.index), ...counts.slice(action.index + 1)]
+    case 'REMOVE_TODO':
+      return state.filter( s => s.id !== action.id)
       break;
-    case 'INCREMENT':
-    case 'DECREMENT':
-      return [...counts.slice(0, action.index), counter(counts[action.index], action), ...counts.slice(action.index + 1)]
+    case 'TOGGLE_TODO':
+      return state.map((s) => todo(s, action))
       break;
     default:
-      return counts;
+      return state
   }
 }
 
-function addCounter(list) {
-  return [...list, 0];
-}
-function removeCounter(list, index) {
-  return [...list.slice(0, index), ...list.slice(index + 1)]
-}
+const todoApp = combineReducers({
+  todos,
+  visibilityFilter
+});
+
+const store = createStore(todoApp);
 
 
-const store = createStore(counters)
 
-
-const Counter = ({value, onIncrement, onDecrement}) => {
-  return (
-    <div>
-      <h1> {value}</h1>
-      <button onClick={onIncrement}> + </button>
-      <button onClick={onDecrement}> - </button>
-    </div>
-  )
-}
-
-const Counters = ({counts, onAddCounter, onRemoveCounter}) => {
-  return (
-    <div>
-      <button onClick={onAddCounter}>add counter</button>
-      {counts.map((count, i) => (
-        <Counter value={counts[i]}  onIncrement={ () => {
-      store.dispatch({
-        type: "INCREMENT",
-        index: i
-      })
-    }} onDecrement={() => {
-      store.dispatch({
-        type: "DECREMENT",
-        index: i
-      })}
-    }></Counter>
-      ))}
-    </div>
-  )
+let nextId = 0;
+class TodoApp extends Component {
+  init() {
+  }
+  render() {
+    return (
+      <div>
+        <input ref='input'/>
+        <button onClick={() => {
+            store.dispatch({
+              type: 'ADD_TODO',
+              id: ++nextId,
+              text: this.refs.input.value
+            })
+            this.refs.input.value = ""
+          }
+        }> Add </button>
+        
+        <ul>
+          {this.props.todos.map(t => {
+            return (
+              <li key={t.id} onClick={() => {
+                  store.dispatch({
+                    type: 'TOGGLE_TODO',
+                    id: t.id
+                  })
+                }
+              } style={{
+                textDecoration: t.completed ? 'line-through' : 'none'
+               }}>{t.text}</li>
+            )
+          })}
+        </ul>
+      </div>
+    )
+  }
 }
 
 const render = () => {
   ReactDOM.render(
-    <Counters counts={store.getState()} onAddCounter={() => {
-      store.dispatch({
-        type: "ADD_COUNTER"
-      })
-    }} />, document.getElementById('root')
+    <TodoApp todos={store.getState().todos}/>, document.getElementById('root')
   )
-};
-store.subscribe(render)
-render()
-||||||| merged common ancestors
-=======
-import expect from 'expect'
-import {createStore} from 'redux'
-
-function counter(state = 0, action) {
-  switch (action.type) {
-    case 'INCREMENT':
-      return state + 1
-      break;
-    case 'DECREMENT':
-      return state - 1
-      break;
-    default:
-      return state;
-  }
 }
 
-const createStore = (reducer) => {
-  let state
-  let listeners = []
-
-  const getState = () => {
-    return state
-  };
-
-  const dispatch = (action) => {
-    state = reducer(state, action)
-    return state
-  };
-  
-  const subscribe = (listener) => {
-    listeners.push(listener)
-  };
-
-  return {
-    getState,
-    dispatch,
-    subscribe
-  }
-};
-
-const store = createStore(counter)
-
-const render = () => {
-  document.body.innerText = store.getState()
-};
 store.subscribe(render)
-
-document.addEventListener('click', () => {
-  store.dispatch({type: 'INCREMENT'})
-})
 render()
->>>>>>> 6cef02ea51f0adac6b352585663157568c489fdd
