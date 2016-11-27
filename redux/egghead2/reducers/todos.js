@@ -1,4 +1,25 @@
-import todo from './todo'
+const todo = (state, action) => {
+  switch (action.type) {
+    case 'ADD_TODO':
+      return {
+        id: action.id,
+        text: action.text,
+        completed: false
+      }
+      break;
+    case 'TOGGLE_TODO':
+      if (state.id === action.id) {
+        return {
+          ...state,
+          completed: !state.completed
+        }
+      }
+      return state
+      break;
+    default:
+      return state
+  }
+}
 
 const todos = (state = [], action) => {
   switch (action.type) {
@@ -17,3 +38,21 @@ const todos = (state = [], action) => {
 }
 
 export default todos
+
+export const getVisibleTodos = (state, filter) => {
+  switch (filter) {
+    case 'all':
+      return state
+    case 'active':
+      return state.filter((t) => {
+        return !t.completed
+      })
+    case 'completed':
+      return state.filter((t) => {
+        return t.completed
+      })
+    default:
+      return state
+  }
+}
+

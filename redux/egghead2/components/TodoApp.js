@@ -7,7 +7,7 @@ const TodoApp = () => {
   return (
     <div>
       <AddTodo/>
-      <VisibleTodoList/>
+      <VisibleTodoList />
       <Footer/>
     </div>
   )
