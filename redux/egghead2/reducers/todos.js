@@ -9,7 +9,7 @@ const byId = (state = {}, action) => {
         ...state,
         [action.id] : todo(state[action.id], action)
       }
-    case 'REMOVE_TODO':
+    case 'DELETE_TODO':
       const {[action.id]:removed, ...remaining} = state
       return remaining
     default:
@@ -21,6 +21,8 @@ const allIds = (state=[], action) => {
   switch (action.type) {
     case 'ADD_TODO':
       return [...state, action.id]
+    case 'DELETE_TODO':
+      return state.filter(id => id !== action.id)
     default:
       return state
   }

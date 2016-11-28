@@ -1,10 +1,10 @@
 import React from 'react'
 
-const Todo = ({completed, text, onClick}) => {
+const Todo = ({completed, text, onClick, onDelete}) => {
   return (
-    <li onClick={onClick} style={{
+    <li><label onClick={onClick} style={{
                 textDecoration: completed ? 'line-through' : 'none'
-               }}>{text}</li>
+    }}>{text}</label> <button onClick={onDelete}>X</button></li>
   )
 };
 

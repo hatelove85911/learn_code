@@ -1,7 +1,7 @@
 import {connect} from 'react-redux'
 import TodoList from './TodoList'
 import React from 'react'
-import {toggleTodo} from '../actions'
+import {toggleTodo, deleteTodo} from '../actions'
 import {withRouter} from 'react-router'
 import {getVisibleTodos} from '../reducers/todoApp'
 
@@ -17,7 +17,8 @@ const mapStateToPropsTodoList = (state, {params}) => {
 //   }
 // }
 const VisibleTodoList = withRouter(connect(mapStateToPropsTodoList, {
-  onClick: toggleTodo
+  onClick: toggleTodo,
+  onDelete: deleteTodo
 })(TodoList))
 
 export default VisibleTodoList
