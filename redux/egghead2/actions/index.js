@@ -14,3 +14,8 @@ export const deleteTodo = (todoid) => ({
       type: 'DELETE_TODO',
       id: todoid
 })
+export const receiveTodos = (filter, todos) => ({
+      type: 'RECEIVE_TODO',
+      filter,
+      todos
+})
