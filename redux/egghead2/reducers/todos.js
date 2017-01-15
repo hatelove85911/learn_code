@@ -3,55 +3,62 @@ import {combineReducers} from 'redux'
 
 const byId = (state = {}, action) => {
   switch (action.type) {
-    case 'ADD_TODO':
-    case 'TOGGLE_TODO':
-      return {
-        ...state,
-        [action.id] : todo(state[action.id], action)
-      }
-    case 'DELETE_TODO':
-      const {[action.id]:removed, ...remaining} = state
-      return remaining
+    case 'RECEIVE_TODO':
+      let nextState = {...state}
+      action.todos.forEach(todo => nextState[todo.id] = todo)
+      return nextState
     default:
       return state
   }
 }
 
 const allIds = (state=[], action) => {
+  if (action.filter !== 'all') {
+    return state
+  }
   switch (action.type) {
-    case 'ADD_TODO':
-      return [...state, action.id]
-    case 'DELETE_TODO':
-      return state.filter(id => id !== action.id)
+    case 'RECEIVE_TODO':
+      return action.todos.map(todo => todo.id)
+    default:
+      return state
+  }
+}
+const activeIds = (state=[], action) => {
+  if (action.filter !== 'active') {
+    return state
+  }
+  switch (action.type) {
+    case 'RECEIVE_TODO':
+      return action.todos.map(todo => todo.id)
+    default:
+      return state
+  }
+}
+const completedIds = (state=[], action) => {
+  if (action.filter !== 'completed') {
+    return state
+  }
+  switch (action.type) {
+    case 'RECEIVE_TODO':
+      return action.todos.map(todo => todo.id)
     default:
       return state
   }
 }
 
+const idsByFilter = combineReducers({
+  all: allIds,
+  active: activeIds,
+  completed: completedIds
+})
+
 const todos = combineReducers({
   byId,
-  allIds
+  idsByFilter
 })
 
 export default todos
 
-const getAllTodos = state => state.allIds.map(id=>state.byId[id])
+export const getVisibleTodos = (state, filter) => state.idsByFilter[filter].map(id=> state.byId[id])
 
-export const getVisibleTodos = (state, filter) => {
-  const allTodos = getAllTodos(state)
-  switch (filter) {
-    case 'all':
-      return allTodos
-    case 'active':
-      return allTodos.filter((t) => {
-        return !t.completed
-      })
-    case 'completed':
-      return allTodos.filter((t) => {
-        return t.completed
-      })
-    default:
-      return allTodos
-  }
-}
 
