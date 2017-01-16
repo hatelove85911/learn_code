@@ -10,3 +10,7 @@ export default todoApp
 export const getVisibleTodos = (state, filter) => {
   return fromTodos.getVisibleTodos(state.todos, filter)
 }
+
+export const getIsFetching = (state, filter) => {
+  return fromTodos.getIsFetching(state.todos, filter)
+}
