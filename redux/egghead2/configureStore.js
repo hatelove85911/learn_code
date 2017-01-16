@@ -1,13 +1,11 @@
 import {createStore, applyMiddleware} from 'redux'
 import createLogger from 'redux-logger'
 import todoApp from './reducers/todoApp'
+import thunk from 'redux-thunk'
 
-const trunk = (store) => (next) => (action) => {
-  typeof action === 'function' ? action(store.dispatch) : next(action)
-}
 const configureStore = () => {
   const store = createStore(todoApp)
-  const middlewares = [trunk]
+  const middlewares = [thunk]
 
   if (process.env.NODE_ENV !== 'production') {
     middlewares.push(createLogger())
