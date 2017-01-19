@@ -4,13 +4,13 @@ const createList = filter => {
   const ids = (state=[], action) => {
     switch (action.type) {
       case 'FETCH_TODO_SUCCESS':
-        return filter === action.filter ? action.todos.map(todo => todo.id) : state
+        return filter === action.filter ? action.response.result : state
       case 'ADD_TODO_SUCCESS':
-        return filter !== 'completed' ? [...state, action.todo.id] : state
+        return filter !== 'completed' ? [...state, action.response.result] : state
       case 'TOGGLE_TODO_SUCCESS':
         if (filter !== 'all') {
-          const index = state.findIndex(id => id === action.todo.id)
-          return index === -1 ? [...state, action.todo.id] : [...state.slice(0, index), ...state.slice(index+1)]
+          const index = state.findIndex(id => id === action.response.result)
+          return index === -1 ? [...state, action.response.result] : [...state.slice(0, index), ...state.slice(index+1)]
         }
         return state
       default:
