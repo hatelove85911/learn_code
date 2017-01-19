@@ -1,17 +1,6 @@
-import {v4} from 'node-uuid'
 import * as api from '../api/fakeRemoteServer'
 import {getIsFetching} from '../reducers/todoApp'
 
-export const addTodo = (text) => ({
-            type: 'ADD_TODO',
-            id: v4(),
-            text
-          })
-
-export const toggleTodo = (todoid) => ({
-      type: 'TOGGLE_TODO',
-      id: todoid
-})
 export const deleteTodo = (todoid) => ({
       type: 'DELETE_TODO',
       id: todoid
@@ -36,6 +25,24 @@ export const fetchTodos = (filter) => (dispatch, getState) => {
       type: 'FETCH_TODO_FAILURE',
       filter,
       errorMessage: error.message || 'something went wrong!'
+    })
+  )
+}
+
+export const addTodo = text => (dispatch) => {
+  return api.addTodo(text).then(
+    response => dispatch({
+      type: 'ADD_TODO_SUCCESS',
+      todo: response
+    })
+  )
+}
+
+export const toggleTodo = id => (dispatch) => {
+  return api.toggleTodo(id).then(
+    response => dispatch({
+      type: 'TOGGLE_TODO_SUCCESS',
+      todo: response
     })
   )
 }

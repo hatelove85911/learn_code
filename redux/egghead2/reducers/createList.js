@@ -2,12 +2,17 @@ import {combineReducers} from 'redux'
 
 const createList = filter => {
   const ids = (state=[], action) => {
-    if (action.filter !== filter) {
-      return state
-    }
     switch (action.type) {
       case 'FETCH_TODO_SUCCESS':
-        return action.todos.map(todo => todo.id)
+        return filter === action.filter ? action.todos.map(todo => todo.id) : state
+      case 'ADD_TODO_SUCCESS':
+        return filter !== 'completed' ? [...state, action.todo.id] : state
+      case 'TOGGLE_TODO_SUCCESS':
+        if (filter !== 'all') {
+          const index = state.findIndex(id => id === action.todo.id)
+          return index === -1 ? [...state, action.todo.id] : [...state.slice(0, index), ...state.slice(index+1)]
+        }
+        return state
       default:
         return state
     }

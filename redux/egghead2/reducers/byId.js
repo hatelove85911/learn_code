@@ -4,6 +4,9 @@ const byId = (state = {}, action) => {
       let nextState = {...state}
       action.todos.forEach(todo => nextState[todo.id] = todo)
       return nextState
+    case 'ADD_TODO_SUCCESS':
+    case 'TOGGLE_TODO_SUCCESS':
+      return {...state, [action.todo.id]: action.todo}
     default:
       return state
   }

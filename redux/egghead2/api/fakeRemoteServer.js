@@ -34,3 +34,25 @@ export const fetchTodos = filter =>
         throw new Error(`unknown filter: ${filter}`)
     }
   })
+
+
+export const addTodo = text => {
+  const newTodo = {
+    id: v4(),
+    text,
+    completed: false
+  }
+
+  return delay(500).then(() => {
+    fakeDatabase.todos.push(newTodo)
+    return newTodo
+  })
+}
+
+export const toggleTodo = id => {
+  const todo = fakeDatabase.todos.find((t) => t.id === id)
+  return delay(500).then(() => {
+    todo.completed = !todo.completed
+    return todo
+  })
+}
