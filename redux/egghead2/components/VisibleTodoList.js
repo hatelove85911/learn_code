@@ -3,8 +3,9 @@ import TodoList from './TodoList'
 import React, {Component} from 'react'
 import * as actions from '../actions'
 import {withRouter} from 'react-router'
-import {getVisibleTodos} from '../reducers/todoApp'
-import {fetchTodos} from '../api/fakeRemoteServer'
+import {getVisibleTodos, getIsFetching, getErrorMessage} from '../reducers/todoApp'
+import ErrorMessage from './ErrorMessage'
+
 
 class VisibleTodoList extends Component {
   componentDidMount(){
@@ -16,15 +17,24 @@ class VisibleTodoList extends Component {
     }
   }
   fetchData() {
-    const {filter, receiveTodos} = this.props
-    fetchTodos(filter).then((todos) => {
-      receiveTodos(filter, todos)
-    })
+    const {filter, fetchTodos} = this.props
+    fetchTodos(filter)
   }
   render() {
-    const {toggleTodo, deleteTodo, ...rest} = this.props
+    const {toggleTodo, deleteTodo, isFetching, todos, errorMessage} = this.props
+
+    if(isFetching && !todos.length) {
+      return (
+        <p> Loading ... </p>
+      )
+    }
+
+    if (errorMessage && !todos.length) {
+      return (<ErrorMessage errorMessage={errorMessage} onRetry={() => this.fetchData()}/>)
+    }
+
     return (
-      <TodoList {...rest} onTodoClick={toggleTodo} onDeleteTodo={deleteTodo}/>
+      <TodoList todos={todos} onTodoClick={toggleTodo} onDeleteTodo={deleteTodo}/>
     )
   }
 }
@@ -34,6 +44,8 @@ const mapStateToPropsTodoList = (state, {params}) => {
   const filter = params.filter || 'all'
   return {
     todos: getVisibleTodos(state, filter),
+    isFetching: getIsFetching(state, filter),
+    errorMessage: getErrorMessage(state, filter),
     filter
   }
 }

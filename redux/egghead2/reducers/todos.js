@@ -1,57 +1,29 @@
-import todo from './todo'
+import byId, * as fromById from './byId'
+import createList, * as fromList from './createList'
 import {combineReducers} from 'redux'
 
-const byId = (state = {}, action) => {
-  switch (action.type) {
-    case 'ADD_TODO':
-    case 'TOGGLE_TODO':
-      return {
-        ...state,
-        [action.id] : todo(state[action.id], action)
-      }
-    case 'DELETE_TODO':
-      const {[action.id]:removed, ...remaining} = state
-      return remaining
-    default:
-      return state
-  }
-}
-
-const allIds = (state=[], action) => {
-  switch (action.type) {
-    case 'ADD_TODO':
-      return [...state, action.id]
-    case 'DELETE_TODO':
-      return state.filter(id => id !== action.id)
-    default:
-      return state
-  }
-}
+const listByFilter = combineReducers({
+  all: createList('all'),
+  active: createList('active'),
+  completed: createList('completed')
+})
 
 const todos = combineReducers({
   byId,
-  allIds
+  listByFilter
 })
 
 export default todos
 
-const getAllTodos = state => state.allIds.map(id=>state.byId[id])
-
 export const getVisibleTodos = (state, filter) => {
-  const allTodos = getAllTodos(state)
-  switch (filter) {
-    case 'all':
-      return allTodos
-    case 'active':
-      return allTodos.filter((t) => {
-        return !t.completed
-      })
-    case 'completed':
-      return allTodos.filter((t) => {
-        return t.completed
-      })
-    default:
-      return allTodos
-  }
+  const ids = fromList.getIds(state.listByFilter[filter])
+  return ids.map(id => fromById.getTodoById(state.byId, id))
 }
 
+export const getIsFetching = (state, filter) => {
+  return fromList.getIsFetching(state.listByFilter[filter])
+}
+
+export const getErrorMessage = (state, filter) => {
+  return fromList.getErrorMessage(state.listByFilter[filter])
+}
