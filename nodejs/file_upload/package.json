@@ -1,5 +1,15 @@
+<<<<<<< HEAD
 {
   "dependencies": {
     "formidable": "^1.1.1"
   }
 }
+||||||| merged common ancestors
+=======
+{
+  "dependencies": {
+    "formidable": "^1.1.1",
+    "pug": "^2.0.0-rc.1"
+  }
+}
+>>>>>>> b0a0397c1a978741e53b3d6f0303209eec828df2
