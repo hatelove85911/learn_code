@@ -2,9 +2,9 @@
   <el-row class="tac">
     <el-col :span="3">
       <el-menu default-active="paishouguanli" router="true" @open="handleOpen" @close="handleClose">
-        <el-menu-item index="biaoshuguanli">标书管理</el-menu-item>
-        <el-menu-item index="paishouguanli">拍手管理</el-menu-item>
-        <el-menu-item index="paipaiguanli">拍牌管理</el-menu-item>
+        <el-menu-item index="biaoshuguanli">Biaoshu Manage</el-menu-item>
+        <el-menu-item index="paishouguanli">Work Manage</el-menu-item>
+        <el-menu-item index="paipaiguanli">Bid Manage</el-menu-item>
       </el-menu>
     </el-col>
     <el-col :span="16">

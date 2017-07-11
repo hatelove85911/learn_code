@@ -4,6 +4,7 @@ import Hello from '@/components/Hello'
 import AdminHome from '@/components/AdminHome'
 import BiaoshuGuanli from '@/components/BiaoshuGuanli'
 import PaishouGuanli from '@/components/PaishouGuanli'
+import GithubLogin from '@/components/GithubLogin'
 
 Vue.use(Router)
 
@@ -12,7 +13,7 @@ export default new Router({
     {
       path: '/',
       name: 'AdminHome',
-      component: AdminHome,
+      component: GithubLogin,
       children: [{
         path: 'biaoshuguanli',
         name: 'BiaoshuGuanli',
@@ -22,6 +23,5 @@ export default new Router({
         name: 'PaishouGuanli',
         component: PaishouGuanli
       }]
-    }
-  ]
+    }]
 })

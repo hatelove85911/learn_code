@@ -1,0 +1,41 @@
+<style>
+</style>
+<template>
+  <view class="container"> 
+  <repeat for="{{posts}}" key="index" index="index" item="item">
+    <text>{{item.title}}</text>
+  </repeat>
+    <button size="mini" @tap="">sdfsdf</button>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import List from '../components/list'
+  import Panel from '../components/panel'
+  import Counter from '../components/counter'
+  import Group from '../components/group'
+  import Toast from 'wepy-com-toast'
+
+  export default class Index extends wepy.page {
+    config = {
+      navigationBarTitleText: '羽山拍牌'
+    }
+    data = {
+      posts: []
+    }
+    computed = {
+    }
+    methods = {
+    }
+    events = {
+    }
+    onLoad() {
+      var that = this;
+      wepy.request('https://jsonplaceholder.typicode.com/posts')
+        .then(function(resp){
+          that.posts = resp.data;
+        })
+    }
+  }
+</script>

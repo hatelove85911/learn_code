@@ -5,12 +5,19 @@ import App from './App'
 import router from './router'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-default/index.css'
-import VueResource from 'vue-resource'
+import axios from 'axios'
+import VueAxios from 'vue-axios'
 
 Vue.config.productionTip = false
 
-Vue.use(ElementUI)
-Vue.use(VueResource);
+Vue.use(ElementUI);
+Vue.use(VueAxios, axios);
+
+// axios defaults
+axios.defaults.baseURL = 'https://paipai-0efd.restdb.io/rest/';
+axios.defaults.headers['Content-Type'] = "application/json";
+axios.defaults.headers['x-apikey'] = "59631597afce09e87211eadb";
+axios.defaults.headers['cache-control'] = "no-cache";
 
 /* eslint-disable no-new */
 new Vue({
