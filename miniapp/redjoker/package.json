@@ -11,11 +11,11 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "install": "^0.10.1",
     "promise-polyfill": "^6.0.2",
     "wepy": "^1.5.7",
     "wepy-async-function": "^1.4.4",
-    "wepy-com-toast": "^1.0.2"
+    "wepy-com-toast": "^1.0.2",
+    "zanui-weapp": "^2.1.0"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.1",

@@ -1,0 +1,27 @@
+<style>
+</style>
+<template></template>
+
+<script>
+  import wepy from 'wepy'
+  import Promise from 'promise-polyfill'
+
+  export default class Index extends wepy.page {
+    config = {
+      navigationBarTitleText: '斗地主'
+    }
+    components = {
+    }
+    mixins = [testMixin]
+    data = {
+    }
+    computed = {
+    }
+    methods = {
+    }
+    events = {
+    }
+    onLoad() {
+    }
+  }
+</script>

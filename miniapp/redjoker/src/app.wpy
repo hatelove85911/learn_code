@@ -1,4 +1,6 @@
 <style lang="less">
+@import "node_modules/zanui-weapp/dist/index.wxss";
+
 .container {
   height: 100%;
   display: flex;
@@ -25,14 +27,16 @@ export default class extends wepy.app {
       navigationBarTextStyle: 'black'
     }
   }
+
   globalData = {
     userInfo: null
   }
+
   constructor () {
     super()
     this.use('requestfix')
-    this.use('promisify')
   }
+
   onLaunch() {
   }
   getUserInfo(cb) {
